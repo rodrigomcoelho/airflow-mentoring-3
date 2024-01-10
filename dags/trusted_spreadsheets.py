@@ -9,14 +9,14 @@ from resources.utils.date import days_ago
 
 from resources.utils.date import TIMEZONE
 
-TABLES = ["table_001", "table_002", "table_003", "table_004", "table_005"]
+SHEETS = ["sheet_001", "sheet_002", "sheet_003", "sheet_004", "sheet_005"]
 
 
 with DAG(
-    dag_id="ingestion.trusted.scoobydb",
+    dag_id="ingestion.trusted.spreadsheets",
     schedule=None,
-    start_date=datetime(2023, 11, 1, tzinfo=TIMEZONE),
-    tags=["trusted", "scoobydb"],
+    start_date=datetime(2023, 10, 1, tzinfo=TIMEZONE),
+    tags=["trusted", "spreadsheets"],
     default_args={
         "owner": "rodrigo",
         "depends_on_past": True,
@@ -27,12 +27,13 @@ with DAG(
         "stop": EmptyOperator(task_id="stop"),
     }
 
-    for table in TABLES:
+    for sheet in SHEETS:
+        sensor_task = f"sensor_{sheet}"
 
-        tasks[table] = PythonOperator(
-            task_id=table,
+        tasks[sheet] = PythonOperator(
+            task_id=sheet,
             python_callable=lambda: sleep(10),
         )
 
-        tasks["start"].set_downstream(tasks[table])
-        tasks[table].set_downstream(tasks["stop"])
+        tasks["start"].set_downstream(tasks[sheet])
+        tasks[sheet].set_downstream(tasks["stop"])

@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import sleep
 
 from airflow import DAG
@@ -6,6 +7,7 @@ from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from resources.utils.date import days_ago
 
+from resources.utils.date import TIMEZONE
 
 TABLES = [
   "table_001",
@@ -19,8 +21,8 @@ TABLES = [
 with DAG(
     dag_id="ingestion.trusted.pokeapi",
     schedule=None,
-    start_date=days_ago(n=10),
-    tags=["trusted"],
+    start_date=datetime(2023, 11, 1, tzinfo=TIMEZONE),
+    tags=["trusted", "pokeapi"],
     default_args={
         "owner": "rodrigo",
         "depends_on_past": True,
@@ -34,22 +36,10 @@ with DAG(
 
     for table in TABLES:
 
-        #sensor_task = f"sensor_{table}"
-
-        # tasks[sensor_task] = ExternalTaskSensor(
-        #     task_id=sensor_task,
-        #     external_dag_id="ingestion.raw.pokeapi",
-        #     external_task_id=table,
-        #     timeout=60,
-        #     poke_interval=5,
-        #     check_existence=True,
-        # )
-
         tasks[table] = PythonOperator(
             task_id=table,
             python_callable=lambda: sleep(10),
         )
 
         tasks["start"].set_downstream(tasks[table])
-        #tasks[sensor_task].set_downstream(tasks[table_task])
         tasks[table].set_downstream(tasks["stop"])

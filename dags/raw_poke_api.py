@@ -1,14 +1,5 @@
 """
 Minha **DAG** rodando
-Minha **DAG** rodando
-Minha **DAG** rodando
-Minha **DAG** rodando
-
-# Alou
-
-Minha **DAG** rodando
-Minha **DAG** rodando
-Minha **DAG** rodando
 """
 from datetime import datetime
 from time import sleep
@@ -33,13 +24,13 @@ TABLES = ["table_001", "table_002", "table_003", "table_004", "table_005"]
 
 with DAG(
     dag_id="ingestion.raw.pokeapi",
-    start_date=datetime(2023, 12, 2, tzinfo=TIMEZONE),
+    start_date=datetime(2023, 11, 1, tzinfo=TIMEZONE),
     default_args={
         "owner": "rodrigo",
         "depends_on_past": True,
     },
     schedule="@daily",
-    tags=["raw"],
+    tags=["raw", "pokeapi"],
     catchup=True,
     description="Minha DAG de Ingestão",
     doc_md=__doc__,
@@ -63,8 +54,3 @@ with DAG(
         tasks["start"].set_downstream(tasks[table])  # start >> stop
         tasks[table].set_downstream(tasks["trigger"])  # start >> stop
         tasks["stop"].set_upstream(tasks["trigger"])
-
-
-# raw -> dado cru (json, csv, parquet)
-# trusted -> dado pronto para ser consumido, com meta informação (parquet)
-# refined -> dado trabalhado, pronto para a ferramenta de BI.

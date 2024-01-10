@@ -17,13 +17,21 @@ def sleep_in(index: int) -> None:
 
 
 TABLES = {
-    "ingestion.trusted.pokeapi": ["table_002", "table_003"],
-    "ingestion.trusted.scoobydb": ["table_001", "table_005"],
+    "ingestion.trusted.pokeapi": {
+        "tasks": ["table_002", "table_003"],
+    },
+    "ingestion.trusted.scoobydb": {
+        "tasks": ["table_001", "table_005"],
+    },
+    "ingestion.trusted.spreadsheets": {
+        "tasks": ["sheet_002", "sheet_003"],
+        "timedelta": lambda x: datetime(year=x.year, month=x.month, day=1, hour=x.hour, tzinfo=x.tzinfo),
+    },
 }
 
 with DAG(
     dag_id="modeling.refined",
-    start_date=datetime(2023, 12, 2, tzinfo=TIMEZONE),
+    start_date=datetime(2023, 11, 1, tzinfo=TIMEZONE),
     default_args={
         "owner": "rodrigo",
         "depends_on_past": True,
@@ -42,12 +50,17 @@ with DAG(
         ),
     }
 
-    for dag, dag_tasks in TABLES.items():
+    for dag, options in TABLES.items():
+
+        dag_tasks = options.get("tasks", [])
+        execution_fn = options.get("timedelta", lambda x: x)
+
         tasks[dag] = ExternalTaskSensor(
             task_id=dag,
             external_dag_id=dag,
             external_task_ids=dag_tasks,
             poke_interval=2,
+            execution_date_fn=execution_fn,
             timeout=60*2,
             check_existence=True,
         )

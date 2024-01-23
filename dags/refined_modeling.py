@@ -25,7 +25,9 @@ TABLES = {
     },
     "ingestion.trusted.spreadsheets": {
         "tasks": ["sheet_002", "sheet_003"],
-        "timedelta": lambda x: datetime(year=x.year, month=x.month, day=1, hour=x.hour, tzinfo=x.tzinfo),
+        "timedelta": lambda x: datetime(
+            year=x.year, month=x.month, day=1, hour=x.hour, tzinfo=x.tzinfo
+        ),
     },
 }
 
@@ -51,7 +53,6 @@ with DAG(
     }
 
     for dag, options in TABLES.items():
-
         dag_tasks = options.get("tasks", [])
         execution_fn = options.get("timedelta", lambda x: x)
 
@@ -59,9 +60,9 @@ with DAG(
             task_id=dag,
             external_dag_id=dag,
             external_task_ids=dag_tasks,
-            poke_interval=2,
+            poke_interval=10,
             execution_date_fn=execution_fn,
-            timeout=60*2,
+            timeout=60 * 5,
             check_existence=True,
         )
 

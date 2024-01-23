@@ -7,6 +7,11 @@ from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 
 from resources.utils.date import TIMEZONE
+from resources.utils.datasets import (
+    POKEAPI_DATASET_TRUSTED,
+    SCOOBYDB_DATASET_TRUSTED,
+    LINX_DATASET_TRUSTED,
+)
 
 
 def sleep_in(index: int) -> None:
@@ -32,13 +37,13 @@ TABLES = {
 }
 
 with DAG(
-    dag_id="modeling.refined",
+    dag_id="modeling.refined2",
     start_date=datetime(2023, 11, 1, tzinfo=TIMEZONE),
     default_args={
         "owner": "rodrigo",
-        "depends_on_past": True,
+        "depends_on_past": False,
     },
-    schedule="@daily",
+    schedule=[POKEAPI_DATASET_TRUSTED, SCOOBYDB_DATASET_TRUSTED, LINX_DATASET_TRUSTED],
     tags=["refined"],
     catchup=True,
     max_active_runs=1,
@@ -52,21 +57,21 @@ with DAG(
         ),
     }
 
-    for dag, options in TABLES.items():
-        dag_tasks = options.get("tasks", [])
-        execution_fn = options.get("timedelta", lambda x: x)
+    # for dag, options in TABLES.items():
+    #    dag_tasks = options.get("tasks", [])
+    # execution_fn = options.get("timedelta", lambda x: x)
 
-        tasks[dag] = ExternalTaskSensor(
-            task_id=dag,
-            external_dag_id=dag,
-            external_task_ids=dag_tasks,
-            poke_interval=10,
-            execution_date_fn=execution_fn,
-            timeout=60 * 5,
-            check_existence=True,
-        )
+    # tasks[dag] = ExternalTaskSensor(
+    #     task_id=dag,
+    #     external_dag_id=dag,
+    #     external_task_ids=dag_tasks,
+    #     poke_interval=2,
+    #     execution_date_fn=execution_fn,
+    #     timeout=60 * 2,
+    #     check_existence=True,
+    # )
 
-        tasks["start"].set_downstream(tasks[dag])
-        tasks[dag].set_downstream(tasks["modeling"])
+    # tasks["start"].set_downstream(tasks[dag])
+    tasks["start"].set_downstream(tasks["modeling"])
 
     tasks["modeling"].set_downstream(tasks["stop"])

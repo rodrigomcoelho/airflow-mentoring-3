@@ -37,7 +37,7 @@ with DAG(
     max_active_runs=1,
 ) as dag:
     tasks = {
-       "start": EmptyOperator(task_id="start"),
+        "start": EmptyOperator(task_id="start"),
         "trigger": TriggerDagRunOperator(
             task_id="trigger",
             trigger_dag_id="ingestion.trusted.spreadsheets",

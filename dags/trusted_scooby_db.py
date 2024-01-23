@@ -8,6 +8,7 @@ from airflow.sensors.external_task import ExternalTaskSensor
 from resources.utils.date import days_ago
 
 from resources.utils.date import TIMEZONE
+from resources.utils.datasets import SCOOBYDB_DATASET_TRUSTED
 
 TABLES = ["table_001", "table_002", "table_003", "table_004", "table_005"]
 
@@ -28,10 +29,10 @@ with DAG(
     }
 
     for table in TABLES:
-
         tasks[table] = PythonOperator(
             task_id=table,
             python_callable=lambda: sleep(10),
+            outlets=[SCOOBYDB_DATASET_TRUSTED],
         )
 
         tasks["start"].set_downstream(tasks[table])

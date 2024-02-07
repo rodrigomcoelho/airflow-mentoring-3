@@ -9,7 +9,6 @@ readme = "README.md"
 python = "3.10.12"
 apache-airflow = "^2.8.1"
 
-
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
 isort = "^5.13.1"
@@ -20,8 +19,19 @@ taskipy = "^1.12.2"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.black]
+target_version = ["py310"]
+
 [tool.isort]
-known_local_folder =["plugins/*"]
+profile = "black"
+py_version = "310"
+known_first_party = "plugins/"
+
+[tool.autoflake]
+recursive = true
+in_place = true
+remove_unused_variables = true
+remove_all_unused_imports = true
 
 [tool.taskipy.tasks]
-lint = "black dags plugins && isort dags plugins --profile black && autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables dags && autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables plugins"
+lint = "isort . && autoflake . && black ."

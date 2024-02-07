@@ -4,9 +4,6 @@ from time import sleep
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
-from airflow.sensors.external_task import ExternalTaskSensor
-from resources.utils.date import days_ago
-
 from resources.utils.date import TIMEZONE
 
 SHEETS = ["sheet_001", "sheet_002", "sheet_003", "sheet_004", "sheet_005"]

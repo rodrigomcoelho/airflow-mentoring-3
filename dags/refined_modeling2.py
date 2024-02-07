@@ -1,17 +1,16 @@
 from datetime import datetime
-from time import sleep
 from random import randrange
+from time import sleep
+
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
-from airflow.sensors.external_task import ExternalTaskSensor
-
-from resources.utils.date import TIMEZONE
 from resources.utils.datasets import (
+    LINX_DATASET_TRUSTED,
     POKEAPI_DATASET_TRUSTED,
     SCOOBYDB_DATASET_TRUSTED,
-    LINX_DATASET_TRUSTED,
 )
+from resources.utils.date import TIMEZONE
 
 
 def sleep_in(index: int) -> None:

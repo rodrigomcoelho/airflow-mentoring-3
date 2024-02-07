@@ -4,11 +4,8 @@ from time import sleep
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
-from airflow.sensors.external_task import ExternalTaskSensor
-from resources.utils.date import days_ago
-
-from resources.utils.date import TIMEZONE
 from resources.utils.datasets import POKEAPI_DATASET_TRUSTED
+from resources.utils.date import TIMEZONE
 
 TABLES = ["table_001", "table_002", "table_003", "table_004", "table_005"]
 

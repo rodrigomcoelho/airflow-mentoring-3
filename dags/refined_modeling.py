@@ -1,11 +1,11 @@
 from datetime import datetime
-from time import sleep
 from random import randrange
+from time import sleep
+
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
-
 from resources.utils.date import TIMEZONE
 
 

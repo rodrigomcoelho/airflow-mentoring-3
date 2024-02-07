@@ -2,6 +2,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
+
 from resources.operators.tabnews_to_gcs import TabNewsToGCSOperator
 from resources.utils.date import TIMEZONE
 

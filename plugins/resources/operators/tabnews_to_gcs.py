@@ -1,7 +1,8 @@
-
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.context import Context
+
 from resources.hoooks.tabnews_hook import TabNewsHook
+
 
 class TabNewsToGCSOperator(BaseOperator):
     def __init__(self, task_id: str, **kwargs):

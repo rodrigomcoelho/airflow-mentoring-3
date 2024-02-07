@@ -5,6 +5,7 @@ from time import sleep
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
+
 from resources.utils.datasets import (
     LINX_DATASET_TRUSTED,
     POKEAPI_DATASET_TRUSTED,

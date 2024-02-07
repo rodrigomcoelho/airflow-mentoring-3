@@ -1,5 +1,6 @@
-from pendulum import timezone
 from datetime import datetime, timedelta
+
+from pendulum import timezone
 
 TIMEZONE = timezone("America/Sao_Paulo")
 

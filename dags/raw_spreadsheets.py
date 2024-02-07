@@ -2,13 +2,13 @@
 Minha **DAG** rodando
 """
 from datetime import datetime
-from time import sleep
 from random import randrange
+from time import sleep
+
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-
 from resources.utils.date import TIMEZONE
 
 

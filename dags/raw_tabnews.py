@@ -3,10 +3,11 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 
-from resources.operators.tabnews_to_gcs import TabNewsToGCSOperator
+from resources.operators.tabnews_to_gcs import TabNewsToJSONFileOperator
 from resources.utils.date import TIMEZONE
 
-ENDPOINTS = ["contents"]
+ENDPOINTS = ["contents", "status"]
+# TODO: corrigir o problema do status salvando content
 
 with DAG(
     dag_id="ingestion.raw.tabnews",
@@ -28,7 +29,7 @@ with DAG(
     }
 
     for endpoint in ENDPOINTS:
-        tasks[endpoint] = TabNewsToGCSOperator(task_id=endpoint)
+        tasks[endpoint] = TabNewsToJSONFileOperator(task_id=endpoint)
 
         tasks["start"].set_downstream(tasks[endpoint])
         tasks[endpoint].set_downstream(tasks["stop"])

@@ -12,5 +12,6 @@ class TabNewsToGCSOperator(BaseOperator):
 
     def execute(self, context: Context) -> None:
         self.log.info("Estou dentro do nosso operador")
-        self.__hook.fetch()
+        content = self.__hook.fetch()
+        print(content[0])
         self.log.info("Saindo do operador")

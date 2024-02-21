@@ -4,7 +4,7 @@ from airflow.utils.context import Context
 from resources.hoooks.tabnews_hook import TabNewsHook
 
 
-class TabNewsToGCSOperator(BaseOperator):
+class TabNewsToJSONFileOperator(BaseOperator):
     def __init__(self, task_id: str, **kwargs):
         super().__init__(task_id=task_id, **kwargs)
         self.log.info("Criando operador TabNewsToGCS")

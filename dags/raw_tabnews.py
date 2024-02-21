@@ -6,7 +6,8 @@ from airflow.operators.empty import EmptyOperator
 from resources.operators.tabnews_to_gcs import TabNewsToJSONFileOperator
 from resources.utils.date import TIMEZONE
 
-ENDPOINTS = ["contents"]
+ENDPOINTS = ["contents", "status"]
+# TODO: corrigir o problema do status salvando content
 
 with DAG(
     dag_id="ingestion.raw.tabnews",

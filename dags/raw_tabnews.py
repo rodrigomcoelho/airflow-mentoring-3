@@ -7,7 +7,6 @@ from resources.operators.tabnews_to_gcs import TabNewsToJSONFileOperator
 from resources.utils.date import TIMEZONE
 
 ENDPOINTS = ["contents", "status"]
-# TODO: corrigir o problema do status salvando content
 
 with DAG(
     dag_id="ingestion.raw.tabnews",
@@ -32,6 +31,7 @@ with DAG(
     for endpoint in ENDPOINTS:
         tasks[endpoint] = TabNewsToJSONFileOperator(
             task_id=endpoint,
+            conn_id="conn_tabnews",
             endpoint=endpoint,
             pool="tabnews",
         )

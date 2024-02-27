@@ -15,5 +15,5 @@ class TabNewsToJSONFileOperator(BaseOperator):
     def execute(self, context: Context) -> None:
         self.log.info("Estou dentro do nosso operador")
         content = self.__hook.fetch(endpoint=self.__endpoint)
-        self.__storage_hook.save_to_json(content=content)
+        self.__storage_hook.save_to_json(content=content, file_name=self.__endpoint)
         self.log.info("Saindo do operador")

@@ -4,10 +4,10 @@ class JSONFileStorageHook(BaseHook):
     def __init__(self):
         super().__init__()
 
-    def save_to_json(self, content: list[dict]) -> None:
+    def save_to_json(self, content: list[dict], file_name: str) -> None:
         self.log.info("Estou no hook 'JSONFileStorageHook'.")
         path = "/opt/airflow/data"
-        file = "content.json"
+        file = f"{file_name}.json"
 
         file_path = f"{path}/{file}"
         with open(file_path, mode="w", encoding="utf-8") as file:

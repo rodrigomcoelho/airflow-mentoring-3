@@ -30,7 +30,11 @@ with DAG(
     }
 
     for endpoint in ENDPOINTS:
-        tasks[endpoint] = TabNewsToJSONFileOperator(task_id=endpoint, endpoint=endpoint, pool="tabnews")
+        tasks[endpoint] = TabNewsToJSONFileOperator(
+            task_id=endpoint,
+            endpoint=endpoint,
+            pool="tabnews",
+        )
 
         tasks["start"].set_downstream(tasks[endpoint])
         tasks[endpoint].set_downstream(tasks["stop"])

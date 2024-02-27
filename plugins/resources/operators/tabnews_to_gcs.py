@@ -1,8 +1,9 @@
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.context import Context
 
-from resources.hoooks.tabnews_hook import TabNewsHook
 from resources.hoooks.json_file_storage_hook import JSONFileStorageHook
+from resources.hoooks.tabnews_hook import TabNewsHook
+
 
 class TabNewsToJSONFileOperator(BaseOperator):
     def __init__(self, task_id: str, endpoint: str, **kwargs):

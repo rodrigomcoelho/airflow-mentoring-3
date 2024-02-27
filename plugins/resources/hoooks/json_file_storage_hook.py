@@ -1,5 +1,8 @@
-from airflow.hooks.base import BaseHook
 import json
+
+from airflow.hooks.base import BaseHook
+
+
 class JSONFileStorageHook(BaseHook):
     def __init__(self):
         super().__init__()

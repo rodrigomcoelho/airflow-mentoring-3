@@ -1,24 +1,32 @@
 import json
-
+from os.path import join, exists
+from os import mkdir
 from airflow.hooks.base import BaseHook
-
 from datetime import datetime
-from pendulum import timezone
 class JSONFileStorageHook(BaseHook):
-    def __init__(self):
-        super().__init__()
+    PATH = "/opt/airflow/data"
+
+    def __init__(self, partition_date: str):
+        self.__partition_date = datetime.strptime(partition_date, "%Y-%m-%d")
+
+    def __get_file_path(self) -> str:
+        year = str(self.__partition_date.year).zfill(4)
+        month= str(self.__partition_date.month).zfill(2)
+        day = str(self.__partition_date.day).zfill(2)
+
+        file_path = JSONFileStorageHook.PATH
+        for dir_path in [f"year={year}", f"month={month}", f"day={day}"]:
+            file_path = join(file_path, dir_path)
+            if exists(file_path):
+                continue
+            mkdir(file_path)
+
+        return file_path
 
     def save_to_json(self, content: list[dict], file_name: str) -> None:
-        path = "/opt/airflow/data"
         file = f"{file_name}.json"
 
-        # TODO: remover referencia do dia correte.
-        now = datetime.now(tz=timezone("America/Sao_Paulo"))
-        year = str(now.year).zfill(4)
-        month= str(now.month).zfill(2)
-        day = str(now.day).zfill(2)
-
-        file_path = f"{path}/year={year}_month={month}_day={day}_{file}"
+        file_path = join(self.__get_file_path(), file)
         with open(file_path, mode="w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=2, ensure_ascii=False))
             file.write("\n")

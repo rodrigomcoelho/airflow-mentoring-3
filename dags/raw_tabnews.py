@@ -11,11 +11,11 @@ ENDPOINTS = ["contents", "status"]
 with DAG(
     dag_id="ingestion.raw.tabnews",
     schedule="@daily",
-    start_date=datetime(2024, 2, 1, tzinfo=TIMEZONE),
-    catchup=False,
+    start_date=datetime(2024, 2, 25, tzinfo=TIMEZONE),
+    catchup=True,
     default_args={
         "owner": "rodrigo",
-        "depends_on_past": False,
+        "depends_on_past": True,
     },
     tags=[
         "raw",

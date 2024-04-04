@@ -3,7 +3,7 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 
-from resources.operators.tabnews_to_gcs import TabNewsToJSONFileOperator
+from resources.operators.tabnews_to_minio import TabNewsToMinIO
 from resources.utils.date import TIMEZONE
 
 ENDPOINTS = ["contents", "status"]
@@ -29,11 +29,14 @@ with DAG(
     }
 
     for endpoint in ENDPOINTS:
-        tasks[endpoint] = TabNewsToJSONFileOperator(
+        tasks[endpoint] = TabNewsToMinIO(
             task_id=endpoint,
             conn_id="conn_tabnews",
+            storage_conn="conn_storage",
             endpoint=endpoint,
             pool="tabnews",
+            bucket_name="raw",
+            root=["tabnews", endpoint],
         )
 
         tasks["start"].set_downstream(tasks[endpoint])

@@ -280,5 +280,18 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  minio:
+    image: quay.io/minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ROOTUSER
+      MINIO_ROOT_PASSWORD: CHANGEME123
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/minio/data:/data
+    command: server /data --console-address ":9001"
+    user: ${UID}:${GID}
+
 volumes:
   postgres-db-volume:

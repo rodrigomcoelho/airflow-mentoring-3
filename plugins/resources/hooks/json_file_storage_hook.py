@@ -1,8 +1,11 @@
 import json
-from os.path import join, exists
-from os import mkdir
-from airflow.hooks.base import BaseHook
 from datetime import datetime
+from os import mkdir
+from os.path import exists, join
+
+from airflow.hooks.base import BaseHook
+
+
 class JSONFileStorageHook(BaseHook):
     PATH = "/opt/airflow/data"
 
@@ -11,7 +14,7 @@ class JSONFileStorageHook(BaseHook):
 
     def __get_file_path(self) -> str:
         year = str(self.__partition_date.year).zfill(4)
-        month= str(self.__partition_date.month).zfill(2)
+        month = str(self.__partition_date.month).zfill(2)
         day = str(self.__partition_date.day).zfill(2)
 
         file_path = JSONFileStorageHook.PATH
